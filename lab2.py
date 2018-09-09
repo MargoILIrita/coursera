@@ -1,7 +1,6 @@
 import pandas
 
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.tree import DecisionTreeRegressor
 import numpy as np
 
 data = pandas.read_csv('titanic.csv', index_col='PassengerId')
@@ -31,4 +30,13 @@ for i in range(sexs.size):
 
 x = []
 for i in range(ages.size):
-    x.append([ages[i], pclasses[i], fares[i], sexs[i]])
+    x.append([int(ages[i]), pclasses[i], fares[i], sexs[i]])
+classifier = DecisionTreeClassifier()
+classifier.random_state = 241
+classifier.fit(x,survived)
+feature = classifier.feature_importances_
+res = {feature[0]:'Age', feature[1]:'Pclass', feature[2]:'Fare',  feature[3]:'Sex'}
+feature.sort()
+
+f = open('output/tree.txt', 'w')
+f.write(res[feature[2]] + " " + res[feature[3]])
